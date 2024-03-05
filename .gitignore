@@ -73,3 +73,4 @@ crashlytics-build.properties
 
 #Credentials
 /[Aa]ssets/scripts/ScriptableObjects/MongoDB.asset
+/[Aa]ssets/scripts/ScriptableObjects/MongoDB.asset.meta
