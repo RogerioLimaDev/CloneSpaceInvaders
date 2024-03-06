@@ -12,6 +12,24 @@ public class ActionsController : MonoBehaviour
     public Action playerDestroyed;
     public Action<int> fire;
     public Action<int> updatePlayerLives;
+    public Action<GameData> setHighScore;
+    public Action getHighScore;
+    public Action<float> setSquadronSpeed;
+
+    public void SetSquadronSpeed(float speed) 
+    {
+        setSquadronSpeed?.Invoke(speed);
+    }
+
+    public void SetHighScore(GameData data)
+    {
+        setHighScore?.Invoke(data);
+    }
+
+    public void GetHighScore() 
+    {
+        getHighScore?.Invoke();
+    }
 
     public void UpdatePlayerLives(int lives) 
     {

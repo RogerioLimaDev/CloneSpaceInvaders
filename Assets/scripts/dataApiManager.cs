@@ -17,6 +17,31 @@ public class dataApiManager : MonoBehaviour
         actionsController = FindAnyObjectByType<ActionsController>();
     }
 
+    void OnEnable()
+    {
+        actionsController.setHighScore += SaveToPlayerPrefs;
+        actionsController.getHighScore += GetFromPlayerPrefs;
+    }
+
+    void OnDisable()
+    {
+        actionsController.setHighScore -= SaveToPlayerPrefs;
+        actionsController.getHighScore -= GetFromPlayerPrefs;
+    }
+
+    private void SaveToPlayerPrefs(GameData data) 
+    {
+        PlayerPrefs.SetString("user", data.players[0]);
+        PlayerPrefs.SetInt("score", data.scores[0]);
+        Debug.Log($"Data saved to PlayePrefs: User {data.players[0]} Score: {data.scores[0]} ");
+    }
+
+    private void GetFromPlayerPrefs() 
+    {
+        //Provisorio//
+        //TODO : recuperar dados do database
+    }
+
     [ContextMenu ("GetRequest")]
     private async void GetRequest() 
     {

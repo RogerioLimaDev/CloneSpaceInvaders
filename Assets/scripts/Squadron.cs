@@ -5,7 +5,7 @@ using System;
 public class Squadron : MonoBehaviour 
 {
 
-	[SerializeField] private float naveSpeed;
+	private float naveSpeed;
 	ActionsController actionsController;
 	Transform squadronTransform, leftLimit, rightLimit;
 
@@ -17,11 +17,18 @@ public class Squadron : MonoBehaviour
 	void OnEnable()
 	{
 		actionsController.reverseSquadron += ReverseSquadron;
+		actionsController.setSquadronSpeed += SetSquadronSpeed;
 	}
 
-	void OnDisable()
+    private void SetSquadronSpeed(float currentSpeed)
+    {
+		naveSpeed = currentSpeed;
+    }
+
+    void OnDisable()
 	{
 		actionsController.reverseSquadron -= ReverseSquadron;
+		actionsController.setSquadronSpeed -= SetSquadronSpeed;
 	}
 
     private void ReverseSquadron()

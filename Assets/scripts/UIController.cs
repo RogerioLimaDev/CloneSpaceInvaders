@@ -44,11 +44,17 @@ public class UIController : MonoBehaviour
         }
     }
 
+    private void UpdateHighScore() 
+    {
+        highScoreLabel.text = PlayerPrefs.GetInt("score").ToString();
+    }
+
 
     void Start()
     {
         gameOverLabel.enabled = false;
         SetupPlayerLives();
+        UpdateHighScore();
     }
     void SetupPlayerLives() 
     {
