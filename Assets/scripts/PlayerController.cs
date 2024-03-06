@@ -10,6 +10,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Transform cannon, player;
     float playerInput = 0;
     Vector3 playerMovement;
+    ActionsController actionsController;
+
+    void Awake()
+    {
+        actionsController = FindAnyObjectByType<ActionsController>();
+    }
 
     void Start()
     {
@@ -36,6 +42,7 @@ public class PlayerController : MonoBehaviour
     {
         GameObject currentProjectile =Instantiate(projectile,cannon.position, Quaternion.identity);
         Projectile currentBullet = currentProjectile.GetComponent<Projectile>();
+        actionsController.PlayFireSound();
         currentBullet.ProjectileSpeed = 20;
     }
 }

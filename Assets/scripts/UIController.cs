@@ -6,9 +6,9 @@ using System;
 
 public class UIController : MonoBehaviour
 {
-    [SerializeField] private TMP_Text gameOverLabel, highScoreLabel, playerScoreLabel;
+    [SerializeField] private TMP_Text highScoreLabel, playerScoreLabel;
     [SerializeField] private int playerLives;
-    [SerializeField] private GameObject livesImage;
+    [SerializeField] private GameObject livesImage, gameOverLabel;
     [SerializeField] private Transform livesPanel;
     ActionsController actionsController;
     List<GameObject> livesImages = new List<GameObject>();
@@ -52,7 +52,7 @@ public class UIController : MonoBehaviour
 
     void Start()
     {
-        gameOverLabel.enabled = false;
+        gameOverLabel.SetActive(false);
         SetupPlayerLives();
         UpdateHighScore();
         playerScoreLabel.text = "0";
@@ -79,7 +79,7 @@ public class UIController : MonoBehaviour
     private void GameOver()
     {
         UpdateHighScore();
-        gameOverLabel.enabled = true;
+        gameOverLabel.SetActive(true);
     }
 
 }

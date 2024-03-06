@@ -71,6 +71,7 @@ public class GameController : MonoBehaviour
     {
         playerLives--;
         Invoke("SpawnPlayer", 1.0f);
+        actionsController.PlayExplosionSound();
         actionsController.UpdatePlayerLives(playerLives);
     }
 
@@ -88,6 +89,7 @@ public class GameController : MonoBehaviour
     private void IncreaseScore() 
     {
         playerScore += 50;
+        actionsController.PlayInvadersKilledSound();
         
         if(squadron.Count >0)
         {

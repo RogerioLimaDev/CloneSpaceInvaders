@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using System.Collections.Generic;
 
 public class Squadron : MonoBehaviour 
 {
@@ -34,9 +35,27 @@ public class Squadron : MonoBehaviour
 		actionsController.setSquadronSpeed -= SetSquadronSpeed;
 	}
 
-    private void ReverseSquadron()
+    void Start ()
+	{
+		InitializeGame();
+	}
+
+	void InitializeGame() 
+	{
+		CancelInvoke("MoveShip");
+		naveSpeed = 0.1f;
+		invokeSpeed = 0.5f;
+		squadronTransform = GetComponent<Transform>();
+		InvokeRepeating("MoveShip", 0,invokeSpeed);
+	}
+
+	void MoveShip() 
+	{
+		squadronTransform.Translate(naveSpeed,0,0);
+		actionsController.PlayShipSound();
+	}
+	 private void ReverseSquadron()
     {
-		// Debug.Log("REVERSE SQUADRON!!!!");
 		naveSpeed *= -1;
 		Invoke("MoveSquadDown", 0.3f);
     }
@@ -49,20 +68,6 @@ public class Squadron : MonoBehaviour
 		squadPosition.y = squadPosition.y -= 0.05f;
 		squadronTransform.position = squadPosition;
 		CancelInvoke("MoveSquadDown");
-	}
-
-    void Start ()
-	{
-		CancelInvoke("MoveShip");
-		naveSpeed = 0.1f;
-		invokeSpeed = 0.5f;
-		squadronTransform = GetComponent<Transform>();
-		InvokeRepeating("MoveShip", 0,invokeSpeed);
-	}
-
-	void MoveShip() 
-	{
-		squadronTransform.Translate(naveSpeed,0,0);
 	}
 
 }

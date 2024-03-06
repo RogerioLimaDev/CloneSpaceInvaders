@@ -16,7 +16,37 @@ public class ActionsController : MonoBehaviour
     public Action getHighScore;
     public Action<float> setSquadronSpeed;
     public Action boundaryTouched;
+    public Action playFireSound;
+    public Action playExplosionSound;
+    public Action playInvadersKilledSound;
+    public Action playUfoSound;
+    public Action playShipSound;
 
+    public void PlayShipSound() 
+    {
+        playShipSound?.Invoke();
+    }
+
+
+    public void PlayFireSound() 
+    {
+        playFireSound?.Invoke();
+    }
+
+    public void PlayExplosionSound() 
+    {
+        playExplosionSound?.Invoke();
+    }
+
+    public void PlayInvadersKilledSound() 
+    {
+        playInvadersKilledSound?.Invoke();
+    }
+
+    public void PlayUfoSound() 
+    {
+        playUfoSound?.Invoke();
+    }
     public void BoundaryTouched() 
     {
         boundaryTouched?.Invoke();
