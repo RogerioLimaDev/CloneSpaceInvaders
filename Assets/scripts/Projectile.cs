@@ -36,17 +36,18 @@ public class Projectile : MonoBehaviour
         
         if(other.gameObject.tag == "Enemy" )
         {
+            Destroy(other.gameObject);
             Instantiate(explosion,other.transform.position, Quaternion.identity);
             actionsController.EnemyDestroyed();
         }
-
+        else
         if(other.gameObject.tag == "Player")
         {
+            Destroy(other.gameObject);
             Instantiate(playerExplosion, other.transform.position, Quaternion.identity);
             actionsController.PlayerDestroyed();
         }
 
         Destroy(gameObject,0.1f);
-        Destroy(other.gameObject,0.1f);
     }
 }

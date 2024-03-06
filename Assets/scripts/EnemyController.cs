@@ -9,51 +9,103 @@ public class EnemyController : MonoBehaviour
     ActionsController actionsController;
     [SerializeField] private GameObject projectile;
     Transform m_transform, leftLimit, rightLimit, bottomLimit;
-    bool touchedRightBoundary;
-    bool touchedLeftBoundary;
+    bool touchedBoundary;
     float fireInterval;
+    string boundary;
 
 
-    void Awake()
+    private void Awake()
     {
         actionsController = FindAnyObjectByType<ActionsController>();
     }
 
-    void Start()
+    void OnEnable()
     {
-        touchedRightBoundary = false;
-        touchedLeftBoundary= false;
+        actionsController.boundaryTouched += BoundaryTouched;
+    }
+
+    void OnDisable()
+    {
+        actionsController.boundaryTouched -= BoundaryTouched;
+        
+    }
+
+    private void BoundaryTouched()
+    {
+        touchedBoundary = true;
+        Invoke("ResetTouchBool", 1.0f);
+    }
+
+
+    private void Start()
+    {
+        touchedBoundary = false;
         m_transform = GetComponent<Transform>();
         leftLimit = GameObject.Find("leftLimit").GetComponent<Transform>();
         rightLimit = GameObject.Find("rightLimit").GetComponent<Transform>();
         bottomLimit = GameObject.Find("bottomLimit").GetComponent<Transform>();
-
         InvokeRepeating("FireProjectile", 0f, 5.0f);
     }
 
-   void FixedUpdate()
+   private void LateUpdate()
    {
-        if(m_transform.position.x > rightLimit.position.x-0.7f && touchedRightBoundary == false)
+        if(!m_transform)
+            return;
+
+        CheckBoundary();
+   }
+
+   private void CheckBoundary() 
+   {
+        if(touchedBoundary == false && m_transform.position.x > rightLimit.position.x-0.7f && boundary != "right")
         {
-            // Debug.Log("Touched rigth boundary");
-            touchedRightBoundary = true;
-            actionsController.ReverseSquadron();
-            touchedRightBoundary = false;
+            boundary = "right";
+        }
+        else if(touchedBoundary == false && m_transform.position.x < leftLimit.position.x+0.8f && boundary !="left")
+        {
+            boundary = "left";
+        }
+        else if(touchedBoundary == false && m_transform.position.y <= bottomLimit.position.y  && boundary !="bottom")
+        {
+            boundary = "bottom";
+        }else
+        {
+            return;
         }
 
-        if(m_transform.position.x < leftLimit.position.x+0.8f && touchedLeftBoundary == false)
+        if(boundary == "right" || boundary =="left")
         {
-            // Debug.Log("Touched left boundary");
-            touchedLeftBoundary = true;
+            actionsController.BoundaryTouched();
             actionsController.ReverseSquadron();
-            touchedLeftBoundary = false;
         }
 
-        if(m_transform.position.y <= bottomLimit.position.y)
+        if(boundary == "bottom")
         {
-            Debug.Log("Touched bottom boundary");
             actionsController.GameOver();
         }
+
+        switch (boundary)
+        {
+            case "left":
+                Debug.Log($"{this.gameObject.name} touched left boundary");
+            break;
+
+            case "right":
+                Debug.Log($"{this.gameObject.name} touched rigth boundary");
+            break;
+
+            case "bottom":
+                Debug.Log($"{this.gameObject.name} touched bottom boundary");
+            break;
+            
+            default:
+            break;
+        }
+   }
+
+   private void ResetTouchBool() 
+   {
+        touchedBoundary = false;
    }
 
    private void FireProjectile() 

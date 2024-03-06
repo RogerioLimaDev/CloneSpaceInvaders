@@ -15,6 +15,12 @@ public class ActionsController : MonoBehaviour
     public Action<GameData> setHighScore;
     public Action getHighScore;
     public Action<float> setSquadronSpeed;
+    public Action boundaryTouched;
+
+    public void BoundaryTouched() 
+    {
+        boundaryTouched?.Invoke();
+    }
 
     public void SetSquadronSpeed(float speed) 
     {

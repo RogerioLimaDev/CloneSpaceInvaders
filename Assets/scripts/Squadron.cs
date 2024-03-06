@@ -6,6 +6,7 @@ public class Squadron : MonoBehaviour
 {
 
 	private float naveSpeed;
+	private float invokeSpeed;
 	ActionsController actionsController;
 	Transform squadronTransform, leftLimit, rightLimit;
 
@@ -22,7 +23,9 @@ public class Squadron : MonoBehaviour
 
     private void SetSquadronSpeed(float currentSpeed)
     {
-		naveSpeed = currentSpeed;
+		invokeSpeed = currentSpeed;
+		CancelInvoke("MoveShip");
+		InvokeRepeating("MoveShip", 0, invokeSpeed);
     }
 
     void OnDisable()
@@ -50,8 +53,11 @@ public class Squadron : MonoBehaviour
 
     void Start ()
 	{
+		CancelInvoke("MoveShip");
+		naveSpeed = 0.1f;
+		invokeSpeed = 0.5f;
 		squadronTransform = GetComponent<Transform>();
-		InvokeRepeating("MoveShip", 0, 0.5f);
+		InvokeRepeating("MoveShip", 0,invokeSpeed);
 	}
 
 	void MoveShip() 

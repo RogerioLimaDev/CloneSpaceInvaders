@@ -8,9 +8,10 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameObject player, playerSpawnPoint, squadronParent;
     [SerializeField] private List<GameObject> ships;
     [SerializeField] private Transform shipInitialPoint;
-    [SerializeField] private int squadronHSize, squadronVSize;
+    [SerializeField] private int squadronHorizontalSize, squadronVerticalSize;
     [SerializeField] float shipDistance;
-    [SerializeField] float currentSquadronSpeed;
+    [SerializeField] int squadronSpeedChangeRate;
+    private float currentSquadronSpeed;
     int squadronSize;
     private ActionsController actionsController;
     private int playerScore;
@@ -18,6 +19,7 @@ public class GameController : MonoBehaviour
     private GameObject ship;
     private List<GameObject> squadron = new List<GameObject>();
     public int PlayerScore {get{return playerScore;}}
+    private int changeSpeedThreshold;
 
     private void Awake() 
     {
@@ -43,29 +45,32 @@ public class GameController : MonoBehaviour
         playerLives = 3;
         SpawnSquadron();
         SpawnPlayer();
+        currentSquadronSpeed = 0.5f;
     }
 
-    void Update()
-    {
-        if(squadronHSize == 135)
-        {
-            IncreaseSquadronSpeed();
-        }
-    }
 
     private void IncreaseSquadronSpeed()
     {
-        currentSquadronSpeed += 0.2f;
+        if(currentSquadronSpeed > 0)
+        {
+            currentSquadronSpeed -= 0.1f;
+        }
+
         SetSquadronSpeed(currentSquadronSpeed);
-        Debug.Log($"Increasing squadron speed to {currentSquadronSpeed}");
+        changeSpeedThreshold = squadronSize - squadronSpeedChangeRate;
+        Debug.Log($"<color=yellow>Squadron speed is {currentSquadronSpeed}</color>");
     }
 
+    private void SetSquadronSpeed(float speed)
+    {
+        actionsController.SetSquadronSpeed(speed);
+    }
 
 
     void PlayerWasHit() 
     {
         playerLives--;
-        Invoke("SpawnPlayer", 0.8f);
+        Invoke("SpawnPlayer", 1.0f);
         actionsController.UpdatePlayerLives(playerLives);
     }
 
@@ -83,27 +88,30 @@ public class GameController : MonoBehaviour
     private void IncreaseScore() 
     {
         playerScore += 50;
+        
         if(squadron.Count >0)
         {
            squadronSize --;
         }
-        Debug.Log($"Squadron Size: {squadronSize}");
-
+        if(squadronSize == changeSpeedThreshold)
+        {
+            IncreaseSquadronSpeed();
+        }
+        Debug.Log($"<color=green>Squadron Size: {squadronSize}</color>");
+        Debug.Log($"change speed at squadron size: {changeSpeedThreshold}");
     }
 
     private void GameOver()
     {
         Time.timeScale = 0.0f;
-        GameData gd = new GameData();
+        GameData gd = new();
+        gd.players = new List<string>();
+        gd.scores = new List<int>();
         gd.players.Add("");
         gd.scores.Add(playerScore);
         actionsController.SetHighScore(gd);
     }
 
-    private void SetSquadronSpeed(float speed)
-    {
-        actionsController.setSquadronSpeed(speed);
-    }
     void SpawnSquadron() 
     {
         Vector2 shipPosition = new Vector2();
@@ -111,7 +119,7 @@ public class GameController : MonoBehaviour
         shipPosition.y = shipInitialPoint.transform.position.y;
         int k = 0;
 
-        for (int j = 0; j < squadronVSize; j++)
+        for (int j = 0; j < squadronVerticalSize; j++)
         {
             ship = ships[k];
             k++;
@@ -120,7 +128,7 @@ public class GameController : MonoBehaviour
                 k=0;
             }
 
-            for (int i = 0; i < squadronHSize; i++)
+            for (int i = 0; i < squadronHorizontalSize; i++)
             {
                 GameObject newShip = Instantiate(ship, shipPosition, Quaternion.identity);
                 shipPosition.x += shipDistance;
@@ -131,7 +139,9 @@ public class GameController : MonoBehaviour
             shipPosition.y -= shipDistance;
         }
         squadronSize = squadron.Count;
+        changeSpeedThreshold = squadronSize - squadronSpeedChangeRate;
         SetSquadronSpeed(currentSquadronSpeed);
         Debug.Log($"Squadron Size: {squadronSize}");
+
     }
 }

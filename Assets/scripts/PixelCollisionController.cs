@@ -7,7 +7,7 @@ public class PixelCollisionController : MonoBehaviour
 
     private void OnCollisionEnter(Collision other) 
     {
-        Debug.Log("Collided!");
+        // Debug.Log("Collided!");
         Destroy(gameObject);
         
     }

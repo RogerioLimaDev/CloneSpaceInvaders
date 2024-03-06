@@ -55,7 +55,11 @@ public class UIController : MonoBehaviour
         gameOverLabel.enabled = false;
         SetupPlayerLives();
         UpdateHighScore();
+        playerScoreLabel.text = "0";
     }
+
+    
+
     void SetupPlayerLives() 
     {
         for (int i = 0; i < playerLives; i++)
@@ -74,6 +78,7 @@ public class UIController : MonoBehaviour
 
     private void GameOver()
     {
+        UpdateHighScore();
         gameOverLabel.enabled = true;
     }
 
