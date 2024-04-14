@@ -31,9 +31,20 @@ public class dataApiManager : MonoBehaviour
 
     private void SaveToPlayerPrefs(GameData data) 
     {
+        int lastScore = data.scores[0];
+        int savedScore = PlayerPrefs.GetInt("score");
+        int scoreToSave = 0;
+        if(lastScore > savedScore)
+        {
+            scoreToSave = lastScore;
+        }else
+        {
+            scoreToSave = savedScore;
+        }
+
         PlayerPrefs.SetString("user", data.players[0]);
-        PlayerPrefs.SetInt("score", data.scores[0]);
-        Debug.Log($"Data saved to PlayePrefs: User {data.players[0]} Score: {data.scores[0]} ");
+        PlayerPrefs.SetInt("score", scoreToSave);
+        Debug.Log($"Data saved to PlayePrefs: User {data.players[0]} Score: {scoreToSave} ");
     }
 
     private void GetFromPlayerPrefs() 

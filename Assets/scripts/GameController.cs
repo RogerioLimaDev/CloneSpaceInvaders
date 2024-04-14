@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -46,6 +47,14 @@ public class GameController : MonoBehaviour
         SpawnSquadron();
         SpawnPlayer();
         currentSquadronSpeed = 0.5f;
+    }
+
+    public void Restart() 
+    {
+        SceneManager.UnloadSceneAsync(0);
+        SceneManager.LoadScene(0);
+        Time.timeScale = 1.0f;
+
     }
 
 
@@ -94,6 +103,10 @@ public class GameController : MonoBehaviour
         if(squadron.Count >0)
         {
            squadronSize --;
+        }
+        else
+        {
+            SpawnSquadron();
         }
         if(squadronSize == changeSpeedThreshold)
         {
